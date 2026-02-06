@@ -3,9 +3,14 @@
 source "https://rubygems.org"
 
 gem "jekyll-theme-chirpy", "~> 7.4", ">= 7.4.1"
-gem "jekyll", "~> 4.3"
-gem "jekyll-remote-theme"
-gem "jekyll-paginate"
+gem "jekyll", "4.3.4"
+
+group :jekyll_plugins do
+  gem "jekyll-paginate"
+  gem "jekyll-seo-tag"
+  gem "jekyll-sitemap"
+  gem "jekyll-include-cache"
+end
 
 gem "html-proofer", "~> 5.0", group: :test
 

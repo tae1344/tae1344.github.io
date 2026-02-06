@@ -1,4 +1,3 @@
-# GitHub Pages에는 jekyll-theme-chirpy가 없으므로 remote_theme 사용
 remote_theme: cotes2020/jekyll-theme-chirpy
 
 # The language of the webpage › http://www.lingoes.net/en/translator/langcode.htm
@@ -132,6 +131,13 @@ assets:
     # specify the Jekyll environment, empty means both
     # only works if `assets.self_host.enabled` is 'true'
     env: # [development | production]
+
+plugins:
+  - jekyll-paginate
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-include-cache
+  - jekyll-remote-theme
 
 pwa:
   enabled: true # The option for PWA feature (installable)

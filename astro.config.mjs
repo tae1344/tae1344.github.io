@@ -1,5 +1,23 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
+import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
+import partytown from '@astrojs/partytown';
+
+import tailwindcss from '@tailwindcss/vite';
+import mdx from '@astrojs/mdx';
+import rehypeFigureFromImage from './src/plugins/rehype-figure-from-image.mjs';
+
 // https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  site: 'https://tae1344.github.io',
+  integrations: [react(), sitemap(), partytown(), mdx()],
+  markdown: {
+    rehypePlugins: [rehypeFigureFromImage],
+  },
+
+  vite: {
+    plugins: [tailwindcss()]
+  }
+});

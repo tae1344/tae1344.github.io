@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+
+.prose figure figcaption {
+  text-align: center;
+  font-size: 0.875rem;
+  color: rgb(100 116 139); /* slate-500 */
+  margin-top: 0.5rem;
+}

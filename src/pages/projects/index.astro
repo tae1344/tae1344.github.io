@@ -1,0 +1,65 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { filePathToSlug, toAbsolutePath, toDisplayDate, toDate } from '../../utils/content';
+
+type ProjectListModule = {
+	frontmatter: {
+		title?: string;
+		description?: string;
+		date?: string | Date;
+		tags?: string[];
+		thumbnail?: string;
+		image?: {
+			path?: string;
+		};
+		categories?: string[];
+	};
+};
+
+const projectModules = import.meta.glob('../../_projects/*', { eager: true }) as Record<string, ProjectListModule>;
+const projects = Object.entries(projectModules)
+	.map(([filePath, mod]) => {
+		return {
+			slug: filePathToSlug(filePath),
+			...mod.frontmatter,
+			thumbnail: toAbsolutePath(mod.frontmatter.thumbnail ?? mod.frontmatter.image?.path),
+		};
+	})
+	.sort((a, b) => {
+		if (!a.date || !b.date) return 0;
+		return toDate(a.date).valueOf() < toDate(b.date).valueOf() ? 1 : -1;
+	});
+---
+
+<Layout title="Projects | Tae Kim Portfolio" description="프로젝트 아카이브">
+	<main class="mx-auto w-full max-w-6xl px-4 py-16 md:px-8">
+		<h1 class="mb-3 text-4xl font-extrabold text-slate-900">Projects</h1>
+
+		<div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+			{projects.map((project) => (
+				<a href={`/projects/${project.slug}`} class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md">
+					<div class="aspect-video bg-slate-100">
+						{project.thumbnail ? (
+							<img src={project.thumbnail} alt={project.title} class="h-full w-full object-cover" />
+						) : (
+							<div class="flex h-full items-center justify-center text-sm text-slate-400">No thumbnail</div>
+						)}
+					</div>
+					<div class="p-5">
+						{project.date && <p class="mb-2 text-xs text-slate-500">{toDisplayDate(project.date)}</p>}
+						<h2 class="mb-2 text-xl font-bold text-slate-900 group-hover:text-sky-700">{project.title ?? 'Untitled Project'}</h2>
+						<p class="line-clamp-2 text-sm text-slate-600">{project.description ?? ''}</p>
+						<div class="mt-3 flex flex-wrap gap-2">
+							{project.categories?.slice(0, 1).map((cat) => (
+								<span class="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-700">{cat}</span>
+							))}
+							{project.tags?.slice(0, 3).map((tag) => (
+								<span class="rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-medium text-sky-700">{tag}</span>
+							))}
+						</div>
+					</div>
+				</a>
+			))}
+		</div>
+	</main>
+</Layout>

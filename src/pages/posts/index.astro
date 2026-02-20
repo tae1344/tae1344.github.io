@@ -1,0 +1,51 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/features/PostCard.astro';
+import { filePathToSlug, toDate } from '../../utils/content';
+
+type PostMarkdownModule = {
+	frontmatter: {
+		title?: string;
+		summary?: string;
+		excerpt?: string;
+		date?: string | Date;
+		readingTime?: string;
+		category?: string;
+	};
+};
+
+const modules = import.meta.glob('../../_posts/*.md', { eager: true }) as Record<string, PostMarkdownModule>;
+
+const posts = Object.entries(modules)
+	.map(([filePath, mod]) => {
+		const fm = mod.frontmatter ?? {};
+		return {
+			slug: filePathToSlug(filePath),
+			title: fm.title ?? 'Untitled Post',
+			excerpt: fm.excerpt ?? fm.summary ?? '',
+			date: toDate(fm.date, new Date()),
+			readingTime: fm.readingTime ?? '5 min read',
+			category: fm.category ?? '',
+		};
+	})
+	.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+---
+
+<Layout title="Posts | Tae Kim Portfolio" description="학습 과정과 기술 인사이트">
+	<main class="mx-auto w-full max-w-5xl px-4 py-16 md:px-8">
+		<h1 class="mb-4 text-4xl font-extrabold text-slate-900">Posts</h1>
+		<p class="mb-8 text-slate-600">문제 정의, 비교 분석, 선택 근거를 담은 기술 포스트를 정리합니다.</p>
+
+		<div class="grid gap-5">
+			{posts.map((post) => (
+				<PostCard
+					title={post.title}
+					date={post.date}
+					excerpt={post.excerpt}
+					readingTime={post.readingTime}
+					href={`/posts/${post.slug}`}
+				/>
+			))}
+		</div>
+	</main>
+</Layout>

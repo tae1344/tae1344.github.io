@@ -8,8 +8,8 @@ export default {
           css: {
             'code::before': { content: '""' },
             'code::after': { content: '""' },
-            'blockquote p:first-of-type::before': { content: '""' },
-            'blockquote p:last-of-type::after': { content: '""' },
+            'blockquote p:first-of-type::before': { content: 'none' },
+            'blockquote p:last-of-type::after': { content: 'none' },
           },
         },
       },

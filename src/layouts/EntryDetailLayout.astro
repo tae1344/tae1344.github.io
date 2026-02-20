@@ -1,0 +1,169 @@
+---
+import Layout from './Layout.astro';
+
+type Metric = {
+  label: string;
+  value: string;
+};
+
+interface Props {
+  pageTitle: string;
+  pageDescription?: string;
+  backHref: string;
+  backLabel: string;
+  title: string;
+  summary?: string;
+  type?: string;
+  date?: string;
+  status?: string;
+  role?: string;
+  team?: string;
+  duration?: string;
+  categories?: string[];
+  tags?: string[];
+  metrics?: Metric[];
+  features?: { [key: string]: string }[];
+  achievements?: { [key: string]: string }[];
+  toc?: string[];
+  headings?: Array<{
+    depth: number;
+    slug: string;
+    text: string;
+  }>;
+}
+
+const {
+  pageTitle,
+  pageDescription = '',
+  backHref,
+  backLabel,
+  title,
+  summary = '',
+  type = '',
+  date = '',
+  status = '',
+  role = '',
+  team = '',
+  duration = '',
+  categories = [],
+  tags = [],
+  metrics = [],
+  features = [],
+  achievements = [],
+  toc = [],
+  headings = [],
+} = Astro.props as Props;
+
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <main class="mx-auto w-full max-w-5xl px-4 py-12 md:px-8">
+    <a href={backHref} class="mb-6 inline-flex text-sm font-semibold text-sky-700 hover:text-sky-800">{backLabel}</a>
+
+    <slot name="media" />
+
+    <header class="mb-8 rounded-2xl border border-slate-200 bg-white p-6 md:p-7">
+      {date && <p class="mb-2 text-slate-400 text-xs"><span class="font-semibold text-slate-400 text-xs">Date:</span> {date}</p>}
+
+      <h1 class="mb-2 text-3xl font-extrabold leading-tight text-slate-900 md:text-4xl">{title}</h1>
+      {summary && <p class="mb-5 text-slate-600">{summary}</p>}
+
+      <div class="mb-4 grid gap-2 text-sm text-slate-700 sm:grid-cols-2">
+        {type && <p><span class="font-semibold text-slate-900">형태:</span> {type}</p>}
+        {role && <p><span class="font-semibold text-slate-900">역할:</span> {role}</p>}
+        {team && <p><span class="font-semibold text-slate-900">팀원:</span> {team}</p>}
+        {duration && <p><span class="font-semibold text-slate-900">기간:</span> {duration}</p>}
+      </div>
+
+      {(tags.length > 0 || categories.length > 0) && (
+        <div class="flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700">{cat}</span>
+          ))}
+          {tags.map((tag) => (
+            <span class="rounded-full bg-sky-50 px-3 py-1 text-xs font-medium text-sky-700">{tag}</span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    {metrics.length > 0 && (
+      <section class="mb-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {metrics.map((metric) => (
+          <div class="rounded-xl border border-slate-200 bg-white p-4">
+            <p class="mb-1 text-xs text-slate-500">{metric.label}</p>
+            <p class="text-lg font-bold text-slate-900">{metric.value}</p>
+          </div>
+        ))}
+      </section>
+    )}
+
+    {features.length > 0 && (
+      <section class="mb-8 rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 class="mb-3 text-lg font-bold text-slate-900">주요 기능</h2>
+        <ul class="list-disc space-y-1 pl-5 text-slate-700">
+          {features.map((item) => item && item.content ? (
+            <li><strong>{item.title}:</strong> {item.content}</li>
+          ) : (
+            <li>{item.title}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {achievements.length > 0 && (
+      <section class="mb-8 rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 class="mb-3 text-lg font-bold text-slate-900">주요 성과</h2>
+        <ul class="list-disc space-y-1 pl-5 text-slate-700">
+          {achievements.map((item) => item && item.content ? (
+            <li><strong>{item.title}:</strong> {item.content}</li>
+          ) : (
+            <li>{item.title}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <div class="flex flex-col gap-6 lg:flex-row lg:items-start">
+      <article
+        data-entry-content
+        class="prose prose-slate prose-headings:scroll-mt-24 prose-p:leading-8 prose-li:leading-8 prose-p:my-5 prose-img:cursor-zoom-in prose-img:rounded-xl prose-img:border prose-img:border-slate-200 prose-blockquote:border-sky-300 prose-blockquote:bg-sky-50 prose-blockquote:px-4 prose-blockquote:py-2 max-w-none rounded-2xl border border-slate-200 bg-white p-6 md:p-8 lg:min-w-0 lg:flex-1"
+      >
+        <slot />
+      </article>
+
+      {(toc.length > 0 || tocHeadings.length > 0) && (
+        <aside class="lg:sticky lg:top-24 lg:w-64 lg:shrink-0">
+          <div class="space-y-4">
+            {tocHeadings.length > 0 && (
+              <nav class="rounded-2xl border border-slate-200 bg-white p-5">
+                <h2 class="mb-3 text-sm font-bold uppercase tracking-wide text-slate-900">On this page</h2>
+                <ul class="space-y-2 text-sm">
+                  {tocHeadings.map((h) => (
+                    <li class:list={[h.depth === 3 ? 'ml-3' : '', 'text-slate-700']}>
+                      <a href={`#${h.slug}`} class="hover:text-sky-700">
+                        {h.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
+
+            {toc.length > 0 && (
+              <section class="rounded-2xl border border-slate-200 bg-white p-5">
+                <h2 class="mb-3 text-sm font-bold uppercase tracking-wide text-slate-900">Overview</h2>
+                <ul class="list-disc space-y-1 pl-5 text-sm text-slate-700">
+                  {toc.map((item) => (
+                    <li>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </div>
+        </aside>
+      )}
+    </div>
+  </main>
+</Layout>

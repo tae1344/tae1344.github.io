@@ -1,0 +1,12 @@
+---
+import R2VideoPlayer from './R2VideoPlayer.tsx';
+
+interface Props {
+  src: string;
+  poster: string;
+}
+
+const { src, poster } = Astro.props as Props;
+---
+
+<R2VideoPlayer client:load src={src} poster={poster} />

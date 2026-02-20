@@ -3,6 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/features/ProjectCard.astro';
 import PostCard from '../components/features/PostCard.astro';
 import { filePathToSlug, toAbsolutePath, toDate } from '../utils/content';
+import mermaid from 'mermaid';
+
+mermaid.initialize({
+	startOnLoad: true,
+	theme: 'base',
+	securityLevel: 'loose',
+});
 
 type ProjectItem = {
 	slug: string;

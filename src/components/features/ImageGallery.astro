@@ -1,0 +1,25 @@
+---
+interface GalleryImage {
+  src: string;
+  alt: string;
+}
+
+interface Props {
+  images: GalleryImage[];
+  columns?: 2 | 3;
+}
+
+const { images, columns = 2 } = Astro.props as Props;
+const columnsClass = columns === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2';
+---
+
+<section class="not-prose my-6">
+  <div class:list={['grid gap-4', columnsClass]}>
+    {images.map((image) => (
+      <figure class="overflow-hidden rounded-xl border border-slate-200 bg-white">
+        <img src={image.src} alt={image.alt} class="h-full w-full object-center " loading="lazy" />
+        <figcaption class="px-3 py-2 text-center text-xs text-slate-500">{image.alt}</figcaption>
+      </figure>
+    ))}
+  </div>
+</section>

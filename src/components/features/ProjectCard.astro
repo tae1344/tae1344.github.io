@@ -1,0 +1,45 @@
+---
+import Card from '../ui/Card.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  thumbnail: string;
+  videoUrl?: string;
+  href: string;
+}
+
+const { title, description, tags, thumbnail, videoUrl, href } = Astro.props;
+---
+
+<Card href={href}>
+  <div class="relative aspect-video w-full overflow-hidden bg-slate-100">
+    <img 
+      src={thumbnail} 
+      alt={title}
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+    />
+    {videoUrl && (
+      <div class="absolute bottom-2 right-2 rounded-md bg-black/60 px-2 py-1 text-[10px] font-bold text-white backdrop-blur-sm">
+        DEMO VIDEO
+      </div>
+    )}
+  </div>
+  
+  <div class="p-5">
+    <div class="mb-3 flex flex-wrap gap-2">
+      {tags.slice(0, 3).map((tag) => (
+        <span class="rounded-full bg-sky-50 px-2.5 py-0.5 text-xs font-medium text-sky-700">
+          {tag}
+        </span>
+      ))}
+    </div>
+    <h3 class="mb-2 text-xl font-bold text-slate-900 transition-colors group-hover:text-sky-700">
+      {title}
+    </h3>
+    <p class="line-clamp-2 text-sm text-slate-600">
+      {description}
+    </p>
+  </div>
+</Card>

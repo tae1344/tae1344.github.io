@@ -1,0 +1,75 @@
+---
+import EntryDetailLayout from '../../layouts/EntryDetailLayout.astro';
+import R2VideoPlayer from '../../components/features/R2VideoPlayer.tsx';
+import ImageLightbox from '../../components/features/ImageLightbox.astro';
+import { toAbsolutePath, filePathToSlug, toDisplayDate } from '../../utils/content';
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: filePathToSlug(project.id) },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props as { project: CollectionEntry<'projects'> };
+const { Content, headings } = await render(project);
+const title = project.data.title ?? 'Project';
+const summary = project.data.summary ?? project.data.description ?? '';
+const description = summary;
+const type = project.data.type ?? 'team';
+const videoUrl = project.data.videoUrl;
+const thumbnail = toAbsolutePath(project.data.thumbnail ?? project.data.image?.path);
+const tags = project.data.tags ?? [];
+const features = project.data.features ?? [];
+const achievements = project.data.achievements ?? [];
+const categories = project.data.categories ?? [];
+const metrics = project.data.metrics ?? [];
+const displayDate = toDisplayDate(project.data.date);
+
+
+---
+
+<EntryDetailLayout
+	pageTitle={`${title} | Projects`}
+	pageDescription={description}
+	backHref="/projects"
+	backLabel="← Back to Projects"
+	title={title}
+	summary={summary}
+	type={type}
+	date={displayDate}
+	status={project.data.status}
+	role={project.data.role}
+	team={project.data.team}
+	duration={project.data.duration}
+	categories={categories}
+	tags={tags}
+	metrics={metrics}
+	features={features}
+	achievements={achievements}
+	toc={project.data.toc}
+	headings={headings}
+>
+	<section slot="media" class="mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+		{videoUrl ? (
+			<div class="relative aspect-[16/9] w-full">
+				<R2VideoPlayer client:visible src={videoUrl} poster={thumbnail} />
+			</div>
+		) : thumbnail ? (
+			<div class="relative aspect-[16/9] w-full">
+				<img src={thumbnail} alt={project.data.image?.alt ?? title} class="h-full w-full object-cover" />
+			</div>
+		) : (
+			<div class="flex aspect-[16/9] w-full items-center justify-center bg-slate-200 text-sm text-slate-500">
+				Hero media is not configured yet.
+			</div>
+		)}
+	</section>
+
+  <Content />
+  <ImageLightbox />
+
+</EntryDetailLayout>

@@ -1,0 +1,54 @@
+---
+import EntryDetailLayout from '../../layouts/EntryDetailLayout.astro';
+import ImageLightbox from '../../components/features/ImageLightbox.astro';
+import { filePathToSlug, toAbsolutePath, toDisplayDate } from '../../utils/content';
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: filePathToSlug(post.id) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: CollectionEntry<'posts'> };
+const { Content } = await render(post);
+const fm = post.data;
+
+const title = fm.title ?? 'Post';
+const summary = fm.summary ?? fm.excerpt ?? '';
+const description = summary;
+const displayDate = toDisplayDate(fm.date);
+const categories = fm.category ? [fm.category] : [];
+const tags = fm.tags ?? [];
+const metrics = fm.metrics ?? [];
+const toc = fm.toc ?? [];
+---
+
+<EntryDetailLayout
+  pageTitle={`${title} | Posts`}
+  pageDescription={description}
+  backHref="/posts"
+  backLabel="← Back to Posts"
+  title={title}
+  summary={summary}
+  date={displayDate}
+  status={fm.status}
+  categories={categories}
+  tags={tags}
+  metrics={metrics}
+  toc={toc}
+>
+  {fm.image?.path && (
+    <section slot="media" class="mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+      <div class="relative aspect-[16/9] w-full">
+        <img src={toAbsolutePath(fm.image.path)} alt={fm.image.alt ?? title} class="h-full w-full object-cover" />
+      </div>
+    </section>
+  )}
+
+  <Content />
+  <ImageLightbox />
+</EntryDetailLayout>

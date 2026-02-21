@@ -19,6 +19,7 @@ interface Props {
   role?: string;
   team?: string;
   duration?: string;
+  deployedUrl?: string;
   categories?: string[];
   tags?: string[];
   metrics?: Metric[];
@@ -45,6 +46,7 @@ const {
   role = '',
   team = '',
   duration = '',
+  deployedUrl = '',
   categories = [],
   tags = [],
   metrics = [],
@@ -75,6 +77,19 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
         {team && <p><span class="font-semibold text-slate-900">팀원:</span> {team}</p>}
         {duration && <p><span class="font-semibold text-slate-900">기간:</span> {duration}</p>}
       </div>
+
+      {deployedUrl && (
+        <div class="mb-5">
+          <a
+            href={deployedUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+          >
+            프로젝트 바로가기
+          </a>
+        </div>
+      )}
 
       {(tags.length > 0 || categories.length > 0) && (
         <div class="flex flex-wrap gap-2">

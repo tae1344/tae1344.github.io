@@ -20,7 +20,7 @@ metrics:
   - label: 사용 모델
     value: LightGBM, CatBoost, XGBoost
 image:
-  path: src/assets/img/snu-kdt-capstone/kolon-used-car-thumbnail.png
+  path: /images/snu-kdt-capstone/kolon-used-car-thumbnail.png
   alt: 캡스톤 프로젝트 시스템 아키텍처
 features:
   - 판매 데이터 기반 1차 매입가 산정: 차량 스펙 정보를 입력하면 알고리즘이 즉시 적정 기준가를 제시하여 신속한 고객 대응 가능
@@ -32,7 +32,7 @@ pinned: true
 mermaid: true
 ---
 
-![중고차 사업 프로세스](/src/assets/img/snu-kdt-capstone/kolon-used-car-process.png)
+![중고차 사업 프로세스](/images/snu-kdt-capstone/kolon-used-car-process.png)
 
 
 ## 1. 개요
@@ -41,7 +41,7 @@ mermaid: true
 
 ---
 
-![문제 정의](/src/assets/img/snu-kdt-capstone/kolon-used-car-problem.png)
+![문제 정의](/images/snu-kdt-capstone/kolon-used-car-problem.png)
 
 
 ## 2. 문제 정의
@@ -85,38 +85,38 @@ mermaid: true
 
 #### 1. 데이터 분석
 
-![데이터 분석](/src/assets/img/snu-kdt-capstone/kolon-used-car-data-info.png)
+![데이터 분석](/images/snu-kdt-capstone/kolon-used-car-data-info.png)
 
 #### 2. 도메인 분석
 
-![선행 연구 분석](/src/assets/img/snu-kdt-capstone/kolon-used-car-research.png)
+![선행 연구 분석](/images/snu-kdt-capstone/kolon-used-car-research.png)
 
 
 #### 3. 모델 설계
 
-![test-train split](/src/assets/img/snu-kdt-capstone/kolon-used-car-test-train-split.png)
+![test-train split](/images/snu-kdt-capstone/kolon-used-car-test-train-split.png)
 
-![clustering](/src/assets/img/snu-kdt-capstone/kolon-used-car-clustering.png)
+![clustering](/images/snu-kdt-capstone/kolon-used-car-clustering.png)
 
-![cross-validation](/src/assets/img/snu-kdt-capstone/kolon-used-car-cv.png)
+![cross-validation](/images/snu-kdt-capstone/kolon-used-car-cv.png)
 
-![파생 변수](/src/assets/img/snu-kdt-capstone/kolon-used-car-variables.png)
+![파생 변수](/images/snu-kdt-capstone/kolon-used-car-variables.png)
 
 ---
 
 ## 6. 모델링 분석
 #### 1. 파생변수 / 외생변수 추가에 따른 성능 향상을 기록함
   
-![결과 - 파생변수 유무](/src/assets/img/snu-kdt-capstone/kolon-used-car-result-1.png)
+![결과 - 파생변수 유무](/images/snu-kdt-capstone/kolon-used-car-result-1.png)
 
-![SHAP value](/src/assets/img/snu-kdt-capstone/kolon-used-car-shap-value.png)
+![SHAP value](/images/snu-kdt-capstone/kolon-used-car-shap-value.png)
 
 
 #### 2. 클러스터링 유무에 따른 달라지는 성능 지표를 확인함
 
-![결과 - 클러스터링](/src/assets/img/snu-kdt-capstone/kolon-used-car-result-2.png)
+![결과 - 클러스터링](/images/snu-kdt-capstone/kolon-used-car-result-2.png)
 
-![결과 - 클러스터링](/src/assets/img/snu-kdt-capstone/kolon-used-car-result-3.png)
+![결과 - 클러스터링](/images/snu-kdt-capstone/kolon-used-car-result-3.png)
 
 ---
 
@@ -125,7 +125,7 @@ mermaid: true
 - **효율성 증대**: 자동화된 알고리즘을 통해 딜러의 데이터 수집 시간을 단축하고 **고객 응대 속도 개선**
 - **리스크 감소**: 객관적 수치를 제공함으로써 과대/과소 매입에 따른 재무적 리스크 방어
 
-![성과](/src/assets/img/snu-kdt-capstone/kolon-used-car-insight.png)
+![성과](/images/snu-kdt-capstone/kolon-used-car-insight.png)
 
 ## 8. 회고 및 개선 방향
 1. 아쉬운 점: 

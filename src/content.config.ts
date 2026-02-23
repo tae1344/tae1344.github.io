@@ -95,6 +95,7 @@ const projects = defineCollection({
       thumbnail: z.string().optional(),
       videoUrl: z.string().url().optional(),
       deployedUrl: z.string().url().optional(),
+      githubUrl: z.string().url().optional(),
       role: z.string().optional(),
       features: FeatureSchema,
       achievements: AchievementSchema,

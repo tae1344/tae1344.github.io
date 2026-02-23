@@ -1,0 +1,141 @@
+---
+title: "[서울대 KDT] Hotel Booking Demand 데이터 분석"
+summary: "Hotel Booking Demand 데이터를 기반으로 예약 취소 예측(XGBoost)과 ADR 회귀 분석(LightGBM)을 수행해 운영 리스크 관리와 가격 전략 수립 인사이트를 도출했습니다."
+description: "Kaggle Hotel Booking Demand 데이터(약 11.9만 건)를 시간 기반으로 분할해 취소 예측과 ADR 회귀를 분석한 프로젝트입니다. 취소 리스크 대응을 위한 임계값·비용 기반 운영 가이드와 시즌성/채널/리드타임 관점의 실무 활용 방안을 제시했습니다."
+date: 2026-02-06 09:00:00 +0900
+status: "Completed"
+type: "개인 과제 (SNU KDT 과정)"
+role: "데이터 전처리 및 분석"
+team: "1명"
+duration: "2025-08-04 ~ 2025-08-14"
+categories: [Project, AI]
+tags: [ML, 시계열 분석, 데이터분석]
+metrics:
+  - label: 소속명
+    value: SNU KDT 11기
+  - label: 데이터
+    value: Kaggle - Hotel Booking Demand(약 11.9만 건)
+  - label: 사용 모델
+    value: XGBoost, LightGBM
+image:
+  path: /images/snu-kdt-project/hotel-booking-thumbnail.png
+  alt: Hotel Booking Demand 프로젝트 썸네일
+githubUrl: https://github.com/tae1344/SNU_bigdata_fintech_2025/tree/main/hotel_booking_cancel_classification
+pinned: true
+mermaid: true
+order: 5
+---
+
+import ImageGallery from '../components/features/ImageGallery.astro';
+
+## 1. 개요
+
+### 목적
+- 예약 취소 여부를 사전에 예측해 운영 리스크(노쇼, 과잉예약, 현금흐름 변동)를 관리
+- **ADR(평균 일일 요금)** 을 회귀 모델을 추정해 가격 전략 및 수익 전망에 활용
+
+### 데이터 및 범위
+- **소스:** Kaggle - Hotel Booking Demand
+- **규모:** 약 11.9만 행, 2015년 7월 ~ 2017년 8월 데이터
+- **대상:** 시티 호텔 및 리조트 호텔
+- **검증 방식:** 시간 기반 분할 (2015-2016 학습 / 2017 검증)
+
+### 핵심 KPI
+- **분류:** ROC-AUC, PR-AUC, F1 score
+- **회귀:** RMSE, MAE, RMSLE
+
+---
+
+## 2. 데이터 준비 및 전처리
+
+### 데이터 사전 (핵심 필드)
+- **수치형:** `lead_time`, `stays_in_week_nights`, `adr`, `previous_cancellations` 등
+- **범주형:** `hotel`, `market_segment`, `deposit_type`, `customer_type` 등
+- **파생 변수:** `stay_nights`(총 체류일), `total_guests`(총 인원), `is_weekend_arrival` 등
+
+
+### 전처리 요약
+- **변환:** 도착일(`arrival_date`)을 datetime으로 구성.
+- **누수(Leakage) 제거:** 사후 정보인 `reservation_status` 및 예약 당시 미확정 정보인 `assigned_room_type` 제외
+- **결측치 및 이상치:** `children`, `agent` 등 결측치 보정, 게스트 수가 0인 행 제거 및 ADR 분석 시 유효 값(체류일 > 0, ADR > 0)만 사용
+- **범주 축소:** 국가(`country`) 정보를 상위 20개와 'OTHER'로 재분류
+
+---
+
+## 3. 탐색적 데이터 분석 (EDA) 인사이트
+- **클래스 불균형:** 취소 비중이 상당하여 PR-AUC 모니터링이 필수적임
+![클래스 불균형](/images/snu-kdt-project/hotel-booking-output.png)
+
+- **시계열 추이:** 성수기와 비수기 패턴이 존재하며, 예약 수와 취소율이 항상 정비례하지는 않음
+![시계열 추이](/images/snu-kdt-project/hotel-booking-output2.png)
+
+- **리드 타임:** 예약 시점이 빠를수록(Lead time이 길수록) 취소율이 높아지는 경향을 보임
+![리드 타임](/images/snu-kdt-project/hotel-booking-output3.png)
+
+- **체류일(stay_nights):** 단기/장기 체류 구간별 취소율 차등
+
+<ImageGallery
+  images={[
+    { src: '/images/snu-kdt-project/hotel-booking-output4.png', alt: '체류일 별 취소율' },
+    { src: '/images/snu-kdt-project/hotel-booking-output5.png', alt: '체류일 분포' },
+  ]}
+  columns={2}
+/>
+
+
+- **기타:** 보증금 정책(`deposit_type`), 유통 채널, 마케팅 세그먼트에 따라 취소율 격차가 발생함
+![보증금 정책별 취소율](/images/snu-kdt-project/hotel-booking-output6.png)
+
+---
+
+## 4. 모델링 및 평가 결과
+
+### 4-1. 취소 예측 (Classification)
+- **모델:** XGBoost
+- **전처리:** 범주형 - One-Hot 인코딩 / 수치형 - 원형,단순 파생 처리
+- **데이터 분할 방식:** 시간 분할(2015–2016 → train, 2017 → valid)
+- **검증 결과**: **AUC:** 0.8482, **PR-AUC:** 0.8000, **F1 (macro):** 0.7304
+
+![Threshold](/images/snu-kdt-project/hotel-booking-output8.png)
+
+**운영 가이드:** 
+- 기본 0.5 대신 Threshold Sweep(정밀도-재현율-F1 교차)로 업무 목적에 맞는 Cut-off 설정 
+- 임계값을 비용 관점에서 선택한다고 가정하면, 한 예약에 대한 기대 비용을 아래처럼 정의함
+
+$$
+EC = c_{FP}\cdot P(FP) + c_{FN}\cdot P(FN)
+$$
+
+여기서 *$c_{FP}$: 불필요 조치 비용(과잉 컨택/고객경험 저하), $c_{FN}$: 미탐지로 인한 취소손실(재판매 실패·수수료)*
+
+---
+
+### 4-2. ADR(평균일일요금) 회귀 분석 (Regression)
+- **모델:** LightGBM
+- **검증 결과:**
+- **RMSE:** 66.4571, **RMSLE:** 0.0466
+
+<ImageGallery
+  images={[
+    { src: '/images/snu-kdt-project/hotel-booking-output9.png', alt: '월별 ADR' },
+    { src: '/images/snu-kdt-project/hotel-booking-output10.png', alt: '평균 ADR' },
+  ]}
+  columns={2}
+/>
+
+- **해석:** 시즌성, 호텔 타입, 리드 타임 구간이 ADR 변동의 주요 원인임
+
+
+---
+
+## 5. 비즈니스 활용 및 한계점
+
+**활용 방안**
+1. **취소 리스크 관리:** 고위험군(장기 리드타임 등)에 대해 보증금 유도 및 오버부킹 한도 동적 조정
+2. **가격 전략:** 성수기 및 리드 타임별 세분화된 요금 정책 수립
+3. **채널 최적화:** 취소율이 높은 채널의 약관 재설계 및 로열티 고객 차별화 관리
+
+**한계와 리스크**
+- **데이터 시점:** 2015-2017년 데이터로 최신 시장 변화 반영에 한계가 있음
+- **변수 누락:** 날씨, 이벤트, 경쟁사 가격 등 외생 변수가 제외됨
+- **평가 주의:** 불균형 데이터이므로 Accuracy보다 PR-AUC와 재현율 중심의 의사결정이 필요함

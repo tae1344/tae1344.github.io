@@ -20,6 +20,7 @@ interface Props {
   team?: string;
   duration?: string;
   deployedUrl?: string;
+  githubUrl?: string;
   categories?: string[];
   tags?: string[];
   metrics?: Metric[];
@@ -47,6 +48,7 @@ const {
   team = '',
   duration = '',
   deployedUrl = '',
+  githubUrl = '',
   categories = [],
   tags = [],
   metrics = [],
@@ -78,16 +80,29 @@ const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
         {duration && <p><span class="font-semibold text-slate-900">기간:</span> {duration}</p>}
       </div>
 
-      {deployedUrl && (
-        <div class="mb-5">
-          <a
-            href={deployedUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
-          >
-            프로젝트 바로가기
-          </a>
+      {(deployedUrl || githubUrl) && (
+        <div class="mb-5 flex flex-wrap items-center gap-3">
+          {deployedUrl && (
+            <a
+              href={deployedUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+            >
+              프로젝트 바로가기
+            </a>
+          )}
+
+          {githubUrl && (
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+            >
+              GitHub 바로가기
+            </a>
+          )}
         </div>
       )}
 

@@ -3,9 +3,19 @@
 @plugin "@tailwindcss/typography";
 
 
+.fm-pre-line {
+  white-space: pre-line;
+}
+
 .prose figure figcaption {
   text-align: center;
   font-size: 0.875rem;
   color: rgb(100 116 139); /* slate-500 */
   margin-top: 0.5rem;
+}
+
+[data-entry-content] pre.mermaid .nodeLabel p {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.5 !important;
 }

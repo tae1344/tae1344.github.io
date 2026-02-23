@@ -30,6 +30,7 @@ features:
 # achievements:
 pinned: true
 mermaid: true
+order: 1
 ---
 
 ![중고차 사업 프로세스](/images/snu-kdt-capstone/kolon-used-car-process.png)

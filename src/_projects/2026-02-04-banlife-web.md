@@ -36,6 +36,7 @@ achievements:
   - "GA4/GTM/네이버 애널리틱스 연동으로 데이터 분석 기반 운영 지원"
 pinned: true
 mermaid: false
+order: 2
 ---
 
 ## 1. 개요

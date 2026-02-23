@@ -81,6 +81,7 @@ const projects = defineCollection({
       duration: z.string().optional(),
       categories: z.array(z.string().min(1)).default([]),
       tags: z.array(z.string().min(1)).default([]),
+      order: z.number().int().nonnegative().optional(),
       metrics: z.array(MetricSchema).default([]),
       toc: z.array(z.string().min(1)).default([]),
       image: z

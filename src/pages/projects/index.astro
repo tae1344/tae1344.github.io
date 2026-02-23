@@ -7,6 +7,8 @@ type ProjectListModule = {
 		title?: string;
 		description?: string;
 		date?: string | Date;
+		pinned?: boolean;
+		order?: number;
 		tags?: string[];
 		thumbnail?: string;
 		image?: {
@@ -16,6 +18,7 @@ type ProjectListModule = {
 	};
 };
 
+const FALLBACK_ORDER = Number.MAX_SAFE_INTEGER;
 const projectModules = import.meta.glob('../../_projects/*', { eager: true }) as Record<string, ProjectListModule>;
 const projects = Object.entries(projectModules)
 	.map(([filePath, mod]) => {
@@ -26,8 +29,15 @@ const projects = Object.entries(projectModules)
 		};
 	})
 	.sort((a, b) => {
-		if (!a.date || !b.date) return 0;
-		return toDate(a.date).valueOf() < toDate(b.date).valueOf() ? 1 : -1;
+		const byOrder = (a.order ?? FALLBACK_ORDER) - (b.order ?? FALLBACK_ORDER);
+		if (byOrder !== 0) return byOrder;
+
+		const byPinned = Number(Boolean(b.pinned)) - Number(Boolean(a.pinned));
+		if (byPinned !== 0) return byPinned;
+
+		const aDate = a.date ? toDate(a.date).valueOf() : 0;
+		const bDate = b.date ? toDate(b.date).valueOf() : 0;
+		return bDate - aDate;
 	});
 ---
 

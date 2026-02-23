@@ -20,6 +20,7 @@ type ProjectItem = {
 	videoUrl?: string;
 	date: Date;
 	pinned: boolean;
+	order?: number;
 };
 
 type PostItem = {
@@ -44,6 +45,7 @@ const projects: ProjectItem[] = Object.entries(projectModules).map(([filePath, m
 		videoUrl: fm.videoUrl,
 		date: toDate(fm.date),
 		pinned: Boolean(fm.pinned),
+		order: typeof fm.order === 'number' ? fm.order : undefined,
 	};
 });
 
@@ -58,8 +60,17 @@ const posts: PostItem[] = Object.entries(postModules).map(([filePath, mod]) => {
 	};
 });
 
+const FALLBACK_ORDER = Number.MAX_SAFE_INTEGER;
 const featuredProjects = [...projects]
-	.sort((a, b) => Number(b.pinned) - Number(a.pinned) || b.date.valueOf() - a.date.valueOf())
+	.sort((a, b) => {
+		const byOrder = (a.order ?? FALLBACK_ORDER) - (b.order ?? FALLBACK_ORDER);
+		if (byOrder !== 0) return byOrder;
+
+		const byPinned = Number(b.pinned) - Number(a.pinned);
+		if (byPinned !== 0) return byPinned;
+
+		return b.date.valueOf() - a.date.valueOf();
+	})
 	.slice(0, 3);
 
 const heroProject = featuredProjects[0];

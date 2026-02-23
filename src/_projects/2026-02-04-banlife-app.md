@@ -30,6 +30,7 @@ achievements:
   - RN 환경에서 개발부터 배포 및 운영까지 모두 경험
 pinned: true
 mermaid: true
+order: 3
 ---
 
 ## 1. 개요

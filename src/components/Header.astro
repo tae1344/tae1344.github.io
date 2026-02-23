@@ -1,0 +1,29 @@
+---
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { title = "김태연 | 프론트엔드 개발자 포트폴리오", description = "김태연 | 프론트엔드 개발자 포트폴리오" } = Astro.props as Props;
+---
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" sizes="any"/>
+<link rel="sitemap" href="/sitemap-index.xml">
+
+<title>{title}</title>
+<meta name="description" content="김태연 | 프론트엔드 개발자 포트폴리오">
+<meta name="generator" content={Astro.generator} />
+
+<meta name="theme-color" content="#FFFFFF">
+
+<!-- Web analytics -->
+<!-- <script data-goatcounter="https://my-account.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script> -->
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="김태연 | 프론트엔드 개발자 포트폴리오" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://tae1344.github.io/" />
+<meta property="og:description" content="김태연 | 프론트엔드 개발자 포트폴리오" />
+<!-- <meta property="og:image" content="https://tae1344.github.io/images/seo-banner.png"> -->
+<!-- <meta property="og:image:alt" content=""> -->
+

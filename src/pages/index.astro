@@ -71,13 +71,13 @@ const featuredProjects = [...projects]
 
 		return b.date.valueOf() - a.date.valueOf();
 	})
-	.slice(0, 3);
+	.slice(0, 6);
 
 const heroProject = featuredProjects[0];
 const latestPosts = [...posts].sort((a, b) => b.date.valueOf() - a.date.valueOf()).slice(0, 3);
 ---
 
-<Layout title="Home | Tae Kim Portfolio" description="The AI-Powered FE Engineer - 4년 차 프론트엔드 개발자 포트폴리오">
+<Layout>
 	<main class="mx-auto w-full max-w-6xl px-4 pb-16 pt-8 md:px-8">
 		<section class="mb-12 rounded-2xl border border-slate-200 bg-white p-6 md:p-8">
 			<p class="mb-2 text-xs uppercase tracking-[0.18em] text-sky-700">Frontend + AI</p>
@@ -93,28 +93,10 @@ const latestPosts = [...posts].sort((a, b) => b.date.valueOf() - a.date.valueOf(
 			</div>
 		</section>
 
-		<section id="latest-posts" class="mb-12">
-			<div class="mb-5 flex items-end justify-between">
-				<h2 class="text-2xl font-bold text-slate-900">Latest Posts</h2>
-				<a href="/posts" class="text-sm font-semibold text-sky-700 hover:text-sky-800">View all posts</a>
-			</div>
-			<div class="grid gap-4">
-				{latestPosts.map((post) => (
-					<PostCard
-						title={post.title}
-						date={post.date}
-						excerpt={post.excerpt}
-						readingTime={post.readingTime}
-						href={`/posts/${post.slug}`}
-					/>
-				))}
-			</div>
-		</section>
-
 		<section id="featured-projects" class="mb-12">
 			<div class="mb-5 flex items-end justify-between">
-				<h2 class="text-2xl font-bold text-slate-900">Selected Projects</h2>
-				<a href="/projects" class="text-sm font-semibold text-sky-700 hover:text-sky-800">View all projects</a>
+				<h2 class="text-2xl font-bold text-slate-900">Projects</h2>
+				<a href="/projects" class="text-sm font-semibold text-sky-700 hover:text-sky-800">View All →</a>
 			</div>
 			<div class="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
 				{featuredProjects.map((project) => (

@@ -1,16 +1,7 @@
 ---
 import '../styles/global.css';
 import SiteHeader from '../components/ui/SiteHeader.astro';
-
-interface Props {
-	title?: string;
-	description?: string;
-}
-
-const {
-	title = 'Tae Kim | Frontend Engineer Portfolio',
-	description = '4년 차 프론트엔드 개발자 포트폴리오 - AI와 3D 시각화 기반 사용자 경험 구현',
-} = Astro.props as Props;
+import Header from '../components/Header.astro';
 ---
 
 <!doctype html>
@@ -18,11 +9,7 @@ const {
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
-		<title>{title}</title>
+		<Header title="김태연 | 프론트엔드 개발자 포트폴리오" description="김태연 | 프론트엔드 개발자 포트폴리오" />
 	</head>
 	<body class="bg-slate-50 text-slate-900 antialiased">
 		<SiteHeader />

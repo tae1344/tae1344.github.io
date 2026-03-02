@@ -97,6 +97,7 @@ const projects = defineCollection({
       deployedUrl: z.string().url().optional(),
       githubUrl: z.string().url().optional(),
       role: z.string().optional(),
+      responsibilities: z.array(z.string().min(1)).default([]),
       features: FeatureSchema,
       achievements: AchievementSchema,
     })

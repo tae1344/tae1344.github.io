@@ -6,19 +6,19 @@ const MetricSchema = z.object({
   value: z.string().min(1),
 });
 
-const FeatureSchema = z
-  .array(
-    z.union([
-      z.string().min(1),
-      z.object({
-        title: z.string().min(1),
-        content: z.string().min(1),
-      }),
-      z.record(z.string().min(1), z.string().min(1)),
-    ])
-  )
-  .default([])
-  .transform((items) =>
+const SectionItemSchema = z.object({
+  title: z.string().min(1),
+  content: z.string().min(1),
+});
+
+const SectionInputSchema = z.union([
+  z.string().min(1),
+  SectionItemSchema,
+  z.record(z.string().min(1), z.string().min(1)),
+]);
+
+const createSectionSchema = () =>
+  z.array(SectionInputSchema).default([]).transform((items) =>
     items.map((item) => {
       if (typeof item !== 'string') {
         if ('title' in item && 'content' in item) return item;
@@ -35,34 +35,9 @@ const FeatureSchema = z
     })
   );
 
-const AchievementSchema = z
-  .array(
-    z.union([
-      z.string().min(1),
-      z.object({
-        title: z.string().min(1),
-        content: z.string().min(1),
-      }),
-      z.record(z.string().min(1), z.string().min(1)),
-    ])
-  )
-  .default([])
-  .transform((items) =>
-    items.map((item) => {
-      if (typeof item !== 'string') {
-        if ('title' in item && 'content' in item) return item;
-        const entries = Object.entries(item);
-        const [key, value] = entries[0] ?? ['', ''];
-        return { title: key.trim(), content: String(value).trim() };
-      }
-
-      const [rawTitle, ...rest] = item.split(':');
-      return {
-        title: rawTitle.trim(),
-        content: rest.join(':').trim(),
-      };
-    })
-  );
+const ResponsibilitySchema = createSectionSchema();
+const FeatureSchema = createSectionSchema();
+const AchievementSchema = createSectionSchema();
 
 const projects = defineCollection({
   loader: glob({
@@ -97,7 +72,7 @@ const projects = defineCollection({
       deployedUrl: z.string().url().optional(),
       githubUrl: z.string().url().optional(),
       role: z.string().optional(),
-      responsibilities: z.array(z.string().min(1)).default([]),
+      responsibilities: ResponsibilitySchema,
       features: FeatureSchema,
       achievements: AchievementSchema,
     })

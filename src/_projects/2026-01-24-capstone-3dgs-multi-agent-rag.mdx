@@ -32,6 +32,11 @@ features:
 #   - SPIN + Nudge 세일즈 지식 구축 - 상담 로직을 구조화하여 대화 품질 일관성 강화
 #   - 3DGS 기반 차량 3D 이미지 구축 및 3D 뷰어 카메라 연출 지식 체계 3VVG 정립
 #   - TTS 기반 차량 설명시 정확한 차량 부위를 3D 뷰어를 통해 연출
+
+#역할 + 범위 + 핵심 기여 + 결과
+responsibilities:
+  - 메인: 프로젝트에서 팀장 겸 풀스택 개발자로서 클라이언트·서버·배포 전 과정을 주도하고, 멀티모달 세일즈 에이전트의 엔드투엔드 구현과 안정적 운영 기반을 구축함(기여도 100%)
+  - 서브: 2D이미지/영상 데이터를 받으면 자동으로 3D 차량 이미지를 생성하는 파이프라인 구축함(기여도 50%)
 pinned: true
 mermaid: true
 order: 0
@@ -185,6 +190,7 @@ flowchart TB
 | **Frontend** | Next.js 16, React 19, Three.js / @react-three/fiber, Spark Splat, Zustand, Tailwind, Radix UI | Spark Splat=3D Gaussian Splatting 렌더링 |
 | **LLM**| Gemini-2.5-flash, GPT-4.1-mini / text-embedding-3-small | |
 | **Infrastructure** | Docker, Docker Compose, Nginx, Cloudflare Tunnel | Nginx=요청 분배(리버스 프록시) |
+| **3D** | 3D Gaussian Splatting(3DGS), CF3, Dyno, Colmap | | |
 
 
 ---

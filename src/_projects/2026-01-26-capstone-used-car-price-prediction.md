@@ -27,7 +27,9 @@ features:
   - 차종별 맞춤형 예측(Clustering): 국산 대형차, 고가 차량, 경차 등 6개 클러스터로 분류하여 예측 정확도 향상
   - 파생 변수를 활용한 분석: 연식 대비 주행거리, 판매속도 지수 등 도메인 지식을 반영한 변수를 생성하여 모델 성능 개선
   - 가격 산정 근거 제시 (SHAP Analysis): 특정 차량의 가격이 낮거나 높게 책정된 이유를 시각화된 데이터로 설명
-# achievements:
+responsibilities:
+  - baseline 학습 및 모델 구축 (기여도 50%)
+  - k-modes 클러스터링 복합 모델 구축 (기여도 30%)
 pinned: true
 mermaid: true
 order: 1

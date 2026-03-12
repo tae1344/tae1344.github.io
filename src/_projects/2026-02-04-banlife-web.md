@@ -68,10 +68,70 @@ order: 2
 
 ## 3. 아키텍처 및 협업 방식
 
-- 프론트는 **Next.js App Router** 기반으로 도메인 단위 화면을 구성하고, API 호출 계층을 분리해 백엔드와의 변경 영향도를 최소화
-- 백엔드(Spring Boot)와는 요청/응답 스펙을 기준으로 협업하여, 기능 개발-테스트-QA 단계에서 커뮤니케이션 비용을 낮춤
-- API 문서(REST Docs 산출물)를 참고해 프론트 구현과 QA 시나리오를 정렬하고, 릴리즈 전 검증 품질을 높임
-- 배포 단계에서는 환경별 설정과 지표 확인(에러/행동 로그)을 통해 릴리즈 리스크를 관리
+```mermaid
+flowchart LR
+    U[User Browser]
+
+    subgraph FE[Frontend<br/> Next.js]
+      F_APP[App Router]
+      F_COMP[Components]
+      F_REPO[API Repository]
+      F_MODEL[Entity Model]
+      F_APP --> F_COMP
+      F_COMP --> F_REPO
+      F_REPO --> F_MODEL
+    end
+
+    subgraph BE[Backend<br/> Spring Boot]
+      B_CTRL[Controller]
+      B_SVC[Service]
+      B_REPO[Repository]
+      B_CFG[Security Config]
+      B_CTRL --> B_SVC
+      B_SVC --> B_REPO
+      B_CFG --> B_CTRL
+    end
+
+    subgraph DATA[Data]
+      DB[(DB)]
+      EXT[External Systems]
+    end
+
+    %% subgraph DOCS[Docs]
+    %%   TESTDOC[REST Docs Tests]
+    %%   ADOC[AsciiDoc Source]
+    %%   HTMLDOC[Generated HTML Docs]
+    %%   TESTDOC --> ADOC
+    %%   ADOC --> HTMLDOC
+    %% end
+
+    subgraph DEPLOY[Deploy]
+      ECS[ECS Config]
+      CI[CI CD Pipeline]
+      CI --> ECS
+    end
+
+    U --> F_APP
+    F_REPO --> B_CTRL
+    B_REPO --> DB
+    B_SVC --> EXT
+    ECS --> F_APP
+    ECS --> B_CTRL
+
+```
+
+### 프론트 레이어 구조 (Next.js App Router)
+
+- **레이어 규칙**: `app(라우팅) -> components(UI) -> repository(API 호출) -> entity(도메인 모델)`
+- 백엔드(Spring Boot)와 요청/응답 스펙을 기준으로 협업해 개발-테스트-QA 단계의 커뮤니케이션 비용을 절감
+- API 문서(REST Docs) 기반으로 프론트 구현과 QA 시나리오를 정렬해 릴리즈 전 검증 품질을 높임
+- 배포 시 환경별 설정과 지표(에러/행동 로그) 점검 절차를 운영해 릴리즈 리스크를 관리
+
+### 기술 설계 포인트
+- **상태 책임 분리**: 서버 상태는 **TanStack Query**, 화면/단계 상태는 **Zustand**로 분리해 데이터 흐름을 단순화
+- **멀티 스텝 안정화**: 검색→인증→예약→결제를 모달형 단계 플로우로 구성하고 상태 저장/복원으로 뒤로가기/새로고침 이슈를 완화
+- **정합성 검증**: 인증 복귀, 가격 재계산, 결제 진입 시 공통 검증 로직을 적용해 단계 불일치와 금액 오차를 방지
+- **운영 관찰성 확보**: **Sentry**와 **Amplitude/GA4/GTM**를 결합해 장애 탐지와 사용자 이탈 분석 사이클을 단축
 
 ---
 
@@ -108,17 +168,17 @@ order: 2
 
 ## 6. 기술적 도전 및 해결
 
-**문제 상황**
-- 예약/인증/결제처럼 멀티 스텝으로 이어지는 화면에서 상태가 분산되면, 페이지 이동/복귀 시 데이터 정합성이 깨지기 쉬움
+1. **멀티 스텝 상태 유실 방지**
+- **문제:** 검색→인증→예약→결제 진행 중 뒤로가기/새로고침 시 입력값이 초기화되어 이탈 위험이 증가
+- **해결:** 플로우를 모달형 단계 구조로 재설계하고, 단계별 상태를 내부 스토어에 저장/복원하도록 구현
 
-**해결 방법**
-- 서버 상태는 **TanStack Query**, 클라이언트 UI 상태는 **Zustand**로 역할을 분리
-- 도메인별 API 호출 계층을 분리해 화면 로직과 통신 로직의 결합도를 낮춤
-- 에러 추적(Sentry)과 이벤트 분석(Amplitude)을 함께 사용해 장애 원인과 사용자 이탈 지점을 빠르게 파악
+2. **인증/결제 구간 상태 정합성 확보**
+- **문제:** 외부 본인인증 팝업 복귀 시 단계 상태와 UI 표시가 어긋나 결제 진입 조건 불일치 발생
+- **해결:** 인증 복귀, 가격 계산, 결제 진입 시점에 공통 검증 로직을 적용해 상태 일관성 유지
 
-**결과**
-- 단계형 플로우에서 상태 관리 복잡도를 낮추고, 이슈 발생 시 탐지/대응 시간을 단축
-- 기능 추가/수정 시 영향 범위를 예측하기 쉬워져 유지보수성과 협업 효율이 개선됨
+3. **상태 구조 단순화와 운영 대응 속도 개선**
+- **문제:** 서버 데이터와 UI 상태가 섞이면 변경 영향 범위가 커지고 장애 원인 파악이 지연됨
+- **해결:** 서버 상태는 **TanStack Query**, 화면/단계 상태는 **Zustand**로 분리하고 **Sentry/Amplitude**로 모니터링 체계 운영
 
 ---
 

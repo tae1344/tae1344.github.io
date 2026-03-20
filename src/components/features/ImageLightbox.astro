@@ -67,6 +67,17 @@ const { contentSelector = 'article[data-entry-content]' } = Astro.props as Props
       openModal(target.src, target.alt);
     });
 
+    // Enable keyboard access for image previews.
+    article.addEventListener('keydown', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLImageElement)) return;
+      if (!target.src) return;
+      if (!['Enter', ' '].includes(event.key)) return;
+
+      event.preventDefault();
+      openModal(target.src, target.alt);
+    });
+
     closeButton.addEventListener('click', closeModal);
     modal.addEventListener('click', (event) => {
       if (event.target === modal) closeModal();

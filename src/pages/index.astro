@@ -114,10 +114,10 @@ const latestPosts = [...posts].sort((a, b) => b.date.valueOf() - a.date.valueOf(
 						<a href="https://fullmoon1344.tistory.com " class="rounded-lg border border-slate-300 bg-white/80 px-4 py-2 text-sm font-semibold text-slate-700 transition duration-200 hover:-translate-y-0.5 hover:bg-white">Blog</a>
 					</div>
 					<div class="mt-6 grid gap-2 text-sm text-slate-700 md:grid-cols-2">
-						<p class="rounded-lg bg-white/70 px-3 py-2"><span class="font-semibold text-slate-900">경력:</span> {Math.floor((Date.now() - new Date('2021-02-01').getTime()) / (1000 * 60 * 60 * 24 * 365))}년</p>
+						<!-- <p class="rounded-lg bg-white/70 px-3 py-2"><span class="font-semibold text-slate-900">경력:</span> {Math.floor((Date.now() - new Date('2021-02-01').getTime()) / (1000 * 60 * 60 * 24 * 365))}년</p>
 						<p class="rounded-lg bg-white/70 px-3 py-2"><span class="font-semibold text-slate-900">전문:</span> React Native / Next.js</p>
 						<p class="rounded-lg bg-white/70 px-3 py-2"><span class="font-semibold text-slate-900">관심 분야:</span> AI Product / Data / Fintech</p>
-						<p class="rounded-lg bg-white/70 px-3 py-2"><span class="font-semibold text-slate-900">최근 이수:</span> SNU 빅데이터 핀테크 AI 고급 전문가 과정</p>
+						<p class="rounded-lg bg-white/70 px-3 py-2"><span class="font-semibold text-slate-900">최근 이수:</span> SNU 빅데이터 핀테크 AI 고급 전문가 과정</p> -->
 					</div>
 				</div>
 			</div>
@@ -145,6 +145,8 @@ const latestPosts = [...posts].sort((a, b) => b.date.valueOf() - a.date.valueOf(
 		<section class="mb-12 grid gap-4 md:grid-cols-2">
 			<a href="/about" class="rounded-2xl border border-sky-200 bg-gradient-to-br from-white to-sky-50 p-6 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md">
 				<p class="mb-2 text-xs uppercase tracking-[0.14em] text-slate-500">Experience</p>
+				<h3 class="mb-2 text-lg font-bold text-slate-900">(주)코오롱모빌리티그룹 Full-Stack Engineer</h3>
+				<p class="mb-4 text-sm text-slate-600">중고차 도메인에서 기업 연계 캡스톤 프로젝트 수행 (우수상 수상)</p>
 				<h3 class="mb-2 text-lg font-bold text-slate-900">(주)반려생활 Frontend Lead</h3>
 				<p class="mb-4 text-sm text-slate-600">반려생활 앱/웹 프론트엔드 총괄, MAU 12만 성장 기여</p>
 				<span class="text-sm font-semibold text-sky-700">자세히 보기 →</span>
@@ -157,20 +159,24 @@ const latestPosts = [...posts].sort((a, b) => b.date.valueOf() - a.date.valueOf(
 						<p class="text-sm text-slate-600">Python, JavaScript, TypeScript</p>
 					</div>
 					<div>
-						<p class="mb-1 text-sm font-semibold text-slate-800">Framework</p>
-						<p class="text-sm text-slate-600">React, Next.js, React Native, Expo, Tailwind CSS, Astro</p>
+						<p class="mb-1 text-sm font-semibold text-slate-800">Frontend</p>
+						<p class="text-sm text-slate-600">React, Next.js, Three.js, React Native, Expo, Tailwind CSS, Astro</p>
+					</div>
+					<div>
+						<p class="mb-1 text-sm font-semibold text-slate-800">Backend</p>
+						<p class="text-sm text-slate-600">Node.js, Nest.js, FastAPI</p>
 					</div>
 					<div>
 						<p class="mb-1 text-sm font-semibold text-slate-800">Database</p>
-						<p class="text-sm text-slate-600">PostgreSQL, MongoDB, Qdrant, Redis</p>
+						<p class="text-sm text-slate-600">PostgreSQL, Supabase, Qdrant, Redis</p>
 					</div>
 					<div>
 						<p class="mb-1 text-sm font-semibold text-slate-800">Infrastructure</p>
-						<p class="text-sm text-slate-600">Docker, Nginx, Cloudflare, Github Actions, Cloudflare</p>
+						<p class="text-sm text-slate-600">Docker, Nginx, Cloudflare, Github Actions</p>
 					</div>
 					<div>
 						<p class="mb-1 text-sm font-semibold text-slate-800">AI & Data</p>
-						<p class="text-sm text-slate-600">RAG, Prompt Engineering, LLM, ML, DL, 3DGS</p>
+						<p class="text-sm text-slate-600">LangGraph,RAG, Prompt Engineering, LLM, ML, DL, 3DGS</p>
 					</div>
 				</div>
 			</div>
